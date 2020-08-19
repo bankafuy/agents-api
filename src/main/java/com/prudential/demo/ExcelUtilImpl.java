@@ -2,12 +2,10 @@ package com.prudential.demo;
 
 import com.prudential.demo.dto.AgentDTO;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -22,6 +20,9 @@ public class ExcelUtilImpl implements ExcelUtil<AgentDTO> {
     public String createXlsx(List<AgentDTO> dataList) throws IOException {
         try {
             XSSFWorkbook workbook = new XSSFWorkbook();
+            final CreationHelper creationHelper = workbook.getCreationHelper();
+            final XSSFCellStyle cellStyle = workbook.createCellStyle();
+            cellStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd-MM-yyyy"));
             XSSFSheet sheet = workbook.createSheet("Data");
 
             // Create Header
@@ -49,7 +50,10 @@ public class ExcelUtilImpl implements ExcelUtil<AgentDTO> {
                 cellId.setCellValue(agent.getId());
                 cellAgentNumber.setCellValue(agent.getAgentNumber());
                 cellTransactionDate.setCellValue(agent.getTransactionDate());
+                cellTransactionDate.setCellStyle(cellStyle);
                 cellApi.setCellValue(agent.getApi());
+
+
             }
 
             ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
