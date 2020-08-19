@@ -27,7 +27,7 @@ public class AgentServiceImpl implements AgentService {
     public List<AgentDTO> getDataList(AgentDTO request) {
         List<AgentDTO> results = new LinkedList<>();
 
-        Sort sort = Sort.by(Sort.Order.desc("transactionDate"));
+//        Sort sort = Sort.by(Sort.Order.desc("transactionDate"));
         BooleanExpression predicate = QAgent.agent.id.isNotNull();
 
         if(request != null) {
@@ -40,7 +40,7 @@ public class AgentServiceImpl implements AgentService {
             }
         }
 
-        final Iterable<Agent> dataList = repo.findAll(predicate, sort);
+        final Iterable<Agent> dataList = repo.findAll(predicate);
 
         for (final Agent agent : dataList) {
             final AgentDTO result = modelMapper.map(agent, AgentDTO.class);
