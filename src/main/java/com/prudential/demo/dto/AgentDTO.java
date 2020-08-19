@@ -9,6 +9,7 @@ public class AgentDTO {
     private String agentNumber;
     private Calendar transactionDate;
     private Long api;
+    private String email;
 
     public AgentDTO() {
 
@@ -45,6 +46,10 @@ public class AgentDTO {
         return api;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setFromDate(Calendar fromDate) {
         this.fromDate = fromDate;
     }
@@ -67,5 +72,9 @@ public class AgentDTO {
 
     public void setApi(Long api) {
         this.api = api;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
