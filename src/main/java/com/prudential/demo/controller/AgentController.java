@@ -3,6 +3,10 @@ package com.prudential.demo.controller;
 import com.prudential.demo.ExcelUtil;
 import com.prudential.demo.ExcelUtilImpl;
 import com.prudential.demo.dto.AgentDTO;
+import com.prudential.demo.model.Agent;
+import com.prudential.demo.model.AgentNew;
+import com.prudential.demo.repository.AgentNewRepository;
+import com.prudential.demo.repository.AgentRepository;
 import com.prudential.demo.service.AgentService;
 import com.prudential.demo.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,9 @@ public class AgentController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private AgentNewRepository agentRepository;
 
     @Value("${mail.smtp.host}")
     private String smtpHost;
@@ -90,5 +97,42 @@ public class AgentController {
         return System.currentTimeMillis();
     }
 
+    @GetMapping("/create-data")
+    public Object createSampleData() {
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(1999, Calendar.FEBRUARY, 1, 0,0,0);
+
+        calendar.setTimeZone(TimeZone.getDefault());
+
+        List<AgentNew> dataList = new LinkedList<>();
+        Random ran = new Random();
+
+        for (int i = 0; i < 100001; i++) {
+            AgentNew agentNew = new AgentNew();
+            agentNew.setAgentNumber("1234567");
+            agentNew.setTransactionDate(calendar.getTime());
+
+            int x = ran.nextInt(6) + 5;
+
+            agentNew.setApi(x * 100000);
+            calendar.add(Calendar.DATE, 1);
+            dataList.add(agentNew);
+
+            if(calendar.get(Calendar.YEAR) == 2020) {
+                calendar.add(Calendar.YEAR, -20);
+            }
+        }
+
+//        for (AgentNew agentNew : dataList) {
+//            System.out.println(agentNew.getAgentNumber());
+//            System.out.println(agentNew.getTransactionDate());
+//            System.out.println(agentNew.getApi());
+//        }
+
+        agentRepository.saveAll(dataList);
+        return "OK";
+    }
 
 }

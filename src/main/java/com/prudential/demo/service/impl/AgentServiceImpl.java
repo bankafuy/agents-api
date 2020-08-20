@@ -2,7 +2,9 @@ package com.prudential.demo.service.impl;
 
 import com.prudential.demo.dto.AgentDTO;
 import com.prudential.demo.model.Agent;
+import com.prudential.demo.model.AgentNew;
 import com.prudential.demo.model.QAgent;
+import com.prudential.demo.repository.AgentNewRepository;
 import com.prudential.demo.repository.AgentRepository;
 import com.prudential.demo.service.AgentService;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -18,7 +20,7 @@ import java.util.List;
 public class AgentServiceImpl implements AgentService {
 
     @Autowired
-    private AgentRepository repo;
+    private AgentNewRepository repo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -40,9 +42,9 @@ public class AgentServiceImpl implements AgentService {
             }
         }
 
-        final Iterable<Agent> dataList = repo.findAll(predicate);
+        final Iterable<AgentNew> dataList = repo.findAll(predicate);
 
-        for (final Agent agent : dataList) {
+        for (final AgentNew agent : dataList) {
             final AgentDTO result = modelMapper.map(agent, AgentDTO.class);
             results.add(result);
         }
