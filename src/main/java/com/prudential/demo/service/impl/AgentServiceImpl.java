@@ -4,6 +4,7 @@ import com.prudential.demo.dto.AgentDTO;
 import com.prudential.demo.model.Agent;
 import com.prudential.demo.model.AgentNew;
 import com.prudential.demo.model.QAgent;
+import com.prudential.demo.model.QAgentNew;
 import com.prudential.demo.repository.AgentNewRepository;
 import com.prudential.demo.repository.AgentRepository;
 import com.prudential.demo.service.AgentService;
@@ -30,15 +31,15 @@ public class AgentServiceImpl implements AgentService {
         List<AgentDTO> results = new LinkedList<>();
 
 //        Sort sort = Sort.by(Sort.Order.desc("transactionDate"));
-        BooleanExpression predicate = QAgent.agent.id.isNotNull();
+        BooleanExpression predicate = QAgentNew.agentNew.id.isNotNull();
 
         if(request != null) {
             if(request.getFromDate() != null) {
-                predicate = predicate.and(QAgent.agent.transactionDate.goe(request.getFromDate()));
+                predicate = predicate.and(QAgentNew.agentNew.transactionDate.goe(request.getFromDate().getTime()));
             }
 
             if(request.getToDate() != null) {
-                predicate = predicate.and(QAgent.agent.transactionDate.loe(request.getToDate()));
+                predicate = predicate.and(QAgentNew.agentNew.transactionDate.loe(request.getToDate().getTime()));
             }
         }
 

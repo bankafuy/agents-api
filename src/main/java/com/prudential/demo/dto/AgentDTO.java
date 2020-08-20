@@ -5,7 +5,7 @@ import java.util.Calendar;
 public class AgentDTO {
     private Calendar fromDate;
     private Calendar toDate;
-    private String id;
+    private Long id;
     private String agentNumber;
     private Calendar transactionDate;
     private Long api;
@@ -15,7 +15,7 @@ public class AgentDTO {
 
     }
 
-    public AgentDTO(String id, String agentNumber, Calendar transactionDate, Long api) {
+    public AgentDTO(Long id, String agentNumber, Calendar transactionDate, Long api) {
         this.id = id;
         this.agentNumber = agentNumber;
         this.transactionDate = transactionDate;
@@ -30,7 +30,7 @@ public class AgentDTO {
         return toDate;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -58,7 +58,7 @@ public class AgentDTO {
         this.toDate = toDate;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

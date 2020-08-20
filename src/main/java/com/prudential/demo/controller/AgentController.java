@@ -52,13 +52,13 @@ public class AgentController {
     @RequestMapping(value = "/sample", method = RequestMethod.GET)
     public ResponseEntity getSample() {
         List<AgentDTO> dataList = new LinkedList<>();
-        dataList.add(new AgentDTO("id-1", "AGENT-9999", Calendar.getInstance(), 90000L));
-        dataList.add(new AgentDTO("id-2", "AGENT-9999", Calendar.getInstance(), 70000L));
-        dataList.add(new AgentDTO("id-3", "AGENT-9999", Calendar.getInstance(), 80000L));
-        dataList.add(new AgentDTO("id-4", "AGENT-9999", Calendar.getInstance(), 20000L));
-        dataList.add(new AgentDTO("id-5", "AGENT-9999", Calendar.getInstance(), 30000L));
-        dataList.add(new AgentDTO("id-6", "AGENT-9999", Calendar.getInstance(), 40000L));
-        dataList.add(new AgentDTO("id-7", "AGENT-9999", Calendar.getInstance(), 50000L));
+        dataList.add(new AgentDTO(1L, "AGENT-9999", Calendar.getInstance(), 90000L));
+        dataList.add(new AgentDTO(2L, "AGENT-9999", Calendar.getInstance(), 70000L));
+        dataList.add(new AgentDTO(3L, "AGENT-9999", Calendar.getInstance(), 80000L));
+        dataList.add(new AgentDTO(4L, "AGENT-9999", Calendar.getInstance(), 20000L));
+        dataList.add(new AgentDTO(5L, "AGENT-9999", Calendar.getInstance(), 30000L));
+        dataList.add(new AgentDTO(6L, "AGENT-9999", Calendar.getInstance(), 40000L));
+        dataList.add(new AgentDTO(7L, "AGENT-9999", Calendar.getInstance(), 50000L));
         return ResponseEntity.ok(dataList);
     }
 
