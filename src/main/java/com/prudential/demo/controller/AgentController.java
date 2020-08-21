@@ -7,8 +7,11 @@ import com.prudential.demo.model.AgentNew;
 import com.prudential.demo.repository.AgentRepository;
 import com.prudential.demo.service.AgentService;
 import com.prudential.demo.service.MailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,8 @@ import static com.prudential.demo.AliasName.*;
 @RestController
 @RequestMapping("/agents")
 public class AgentController {
+    private static Logger LOGGER = LoggerFactory.getLogger(AgentController.class);
+
     @Autowired
     private AgentService agentService;
 
@@ -41,6 +46,9 @@ public class AgentController {
     @Value("${mail.password}")
     private String smtpMailSenderPassword;
 
+    @Autowired
+    private TaskExecutor taskExecutor;
+
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity getAgentList(@RequestBody AgentDTO request) {
         final List<AgentDTO> dataList = agentService.getDataList(request);
@@ -57,28 +65,11 @@ public class AgentController {
 
     @RequestMapping(value = "/send-email", method = RequestMethod.POST)
     public ResponseEntity sendEmail(@RequestBody AgentDTO request) throws IOException {
-        System.out.println("Start");
-        System.out.println(System.currentTimeMillis());
-        final List<AgentDTO> dataList = agentService.getDataList(request);
-        final String attachment = util.createXlsx(dataList);
 
-        if(request.getEmail() == null || request.getEmail().length() == 0) {
-            request.setEmail("alif@code.id");
-        }
+        final MyRunnable myRunnable = new MyRunnable(request);
+        taskExecutor.execute(myRunnable);
 
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(MAIL_SMTP_HOST, smtpHost);
-        properties.put(MAIL_SMTP_PORT, smtpPort);
-        properties.put(MAIL_SMTP_AUTH, true);
-        properties.put(MAIL_SMTP_SSL_ENABLE, true);
-        properties.put(MAIL_USERNAME, smtpMailSender);
-        properties.put(MAIL_PASSWORD, smtpMailSenderPassword);
-
-        mailService.sendMail(properties, request.getEmail(), attachment);
-
-        System.out.println("end");
-        System.out.println(System.currentTimeMillis());
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(String.format("Data will be sent to %s", request.getEmail()));
     }
 
     @GetMapping("/check")
@@ -115,14 +106,41 @@ public class AgentController {
             }
         }
 
-//        for (AgentNew agentNew : dataList) {
-//            System.out.println(agentNew.getAgentNumber());
-//            System.out.println(agentNew.getTransactionDate());
-//            System.out.println(agentNew.getApi());
-//        }
-
         repo.saveAll(dataList);
         return "OK";
+    }
+
+    private class MyRunnable implements Runnable {
+
+        private AgentDTO request;
+
+        MyRunnable(AgentDTO request) {
+            this.request = request;
+        }
+
+        @Override
+        public void run() {
+            try {
+                final List<AgentDTO> dataList = agentService.getDataList(request);
+                final String attachment = util.createXlsx(dataList);
+
+                if (request.getEmail() == null || request.getEmail().length() == 0) {
+                    request.setEmail("alif@code.id");
+                }
+
+                Map<String, Object> properties = new HashMap<>();
+                properties.put(MAIL_SMTP_HOST, smtpHost);
+                properties.put(MAIL_SMTP_PORT, smtpPort);
+                properties.put(MAIL_SMTP_AUTH, true);
+                properties.put(MAIL_SMTP_SSL_ENABLE, true);
+                properties.put(MAIL_USERNAME, smtpMailSender);
+                properties.put(MAIL_PASSWORD, smtpMailSenderPassword);
+
+                mailService.sendMail(properties, request.getEmail(), attachment);
+            } catch (Exception e) {
+                LOGGER.error(e.toString());
+            }
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class AgentServiceImpl implements AgentService {
 //        Sort sort = Sort.by(Sort.Order.desc("transactionDate"));
 //        BooleanExpression predicate = QAgentNew.agentNew.id.isNotNull();
 //
+//        repo
 //        if(request != null) {
 //            if(request.getFromDate() != null) {
 //                predicate = predicate.and(QAgentNew.agentNew.transactionDate.goe(request.getFromDate().getTime()));
@@ -37,8 +39,10 @@ public class AgentServiceImpl implements AgentService {
 //            }
 //        }
 
-//        final Iterable<AgentNew> dataList = repo.findAll(predicate);
-        final Iterable<AgentNew> dataList = repo.findAll();
+        final Date from = request.getFromDate().getTime();
+        final Date to = request.getToDate().getTime();
+        final Iterable<AgentNew> dataList = repo.findAllByTransactionDateGreaterThanAndTransactionDateLessThanEqual(from, to);
+//        final Iterable<AgentNew> dataList = repo.findAll();
 
         for (final AgentNew agent : dataList) {
             final AgentDTO result = modelMapper.map(agent, AgentDTO.class);
