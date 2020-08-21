@@ -1,8 +1,8 @@
 package com.prudential.demo.controller;
 
-import com.prudential.demo.ExcelUtil;
 import com.prudential.demo.ExcelUtilImpl;
 import com.prudential.demo.dto.AgentDTO;
+import com.prudential.demo.dto.CustomResponse;
 import com.prudential.demo.model.AgentNew;
 import com.prudential.demo.repository.AgentRepository;
 import com.prudential.demo.service.AgentService;
@@ -50,26 +50,28 @@ public class AgentController {
     private TaskExecutor taskExecutor;
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ResponseEntity getAgentList(@RequestBody AgentDTO request) {
+    public CustomResponse getAgentList(@RequestBody AgentDTO request) {
         final List<AgentDTO> dataList = agentService.getDataList(request);
-        return ResponseEntity.ok(dataList.size());
+
+        return new CustomResponse<>("200", "OK", dataList);
     }
 
     @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public ResponseEntity download(@RequestBody AgentDTO request) throws IOException {
+    public CustomResponse download(@RequestBody AgentDTO request) throws IOException {
         final List<AgentDTO> dataList = agentService.getDataList(request);
         Map<String, String> response = new HashMap<>();
         response.put("base64", util.createXlsx(dataList));
-        return ResponseEntity.ok(response);
+
+        return CustomResponse.ok(response);
     }
 
     @RequestMapping(value = "/send-email", method = RequestMethod.POST)
-    public ResponseEntity sendEmail(@RequestBody AgentDTO request) throws IOException {
+    public CustomResponse sendEmail(@RequestBody AgentDTO request) throws IOException {
 
         final MyRunnable myRunnable = new MyRunnable(request);
         taskExecutor.execute(myRunnable);
 
-        return ResponseEntity.ok(String.format("Data will be sent to %s", request.getEmail()));
+        return CustomResponse.ok(String.format("Data will be sent to %s", request.getEmail()));
     }
 
     @GetMapping("/check")

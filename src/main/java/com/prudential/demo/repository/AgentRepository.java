@@ -8,6 +8,6 @@ import java.util.Date;
 
 public interface AgentRepository extends CrudRepository<AgentNew, Long> {
 
-    Iterable<AgentNew> findAllByTransactionDateGreaterThanAndTransactionDateLessThanEqual(Date greaterDate, Date lessDate);
+    Iterable<AgentNew> findAllByTransactionDateGreaterThanAndTransactionDateLessThanEqualOrderById(Date greaterDate, Date lessDate);
 
 }

@@ -41,7 +41,7 @@ public class AgentServiceImpl implements AgentService {
 
         final Date from = request.getFromDate().getTime();
         final Date to = request.getToDate().getTime();
-        final Iterable<AgentNew> dataList = repo.findAllByTransactionDateGreaterThanAndTransactionDateLessThanEqual(from, to);
+        final Iterable<AgentNew> dataList = repo.findAllByTransactionDateGreaterThanAndTransactionDateLessThanEqualOrderById(from, to);
 //        final Iterable<AgentNew> dataList = repo.findAll();
 
         for (final AgentNew agent : dataList) {
