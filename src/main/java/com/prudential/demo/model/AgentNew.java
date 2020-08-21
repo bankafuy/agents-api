@@ -1,48 +1,28 @@
 package com.prudential.demo.model;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.Field;
+
 import java.util.Date;
 
-@Entity
-@Table(name = "api_agent")
+@Document
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AgentNew {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "serial")
+    @Field
     private Long id;
+    @Field
     private String agentNumber;
+    @Field
     private Date transactionDate;
+    @Field
     private int api;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getAgentNumber() {
-        return agentNumber;
-    }
-
-    public Date getTransactionDate() {
-        return transactionDate;
-    }
-
-    public int getApi() {
-        return api;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setAgentNumber(String agentNumber) {
-        this.agentNumber = agentNumber;
-    }
-
-    public void setTransactionDate(Date transactionDate) {
-        this.transactionDate = transactionDate;
-    }
-
-    public void setApi(int api) {
-        this.api = api;
-    }
 }

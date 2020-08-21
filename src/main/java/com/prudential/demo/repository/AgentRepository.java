@@ -1,9 +1,8 @@
 package com.prudential.demo.repository;
 
-import com.prudential.demo.model.Agent;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import com.prudential.demo.model.AgentNew;
+import org.springframework.data.repository.CrudRepository;
 
-public interface AgentRepository extends JpaRepository<Agent, String>, QuerydslPredicateExecutor<Agent> {
+public interface AgentRepository extends CrudRepository<AgentNew, String> {
 
 }

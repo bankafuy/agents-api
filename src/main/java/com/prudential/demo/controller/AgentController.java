@@ -3,9 +3,7 @@ package com.prudential.demo.controller;
 import com.prudential.demo.ExcelUtil;
 import com.prudential.demo.ExcelUtilImpl;
 import com.prudential.demo.dto.AgentDTO;
-import com.prudential.demo.model.Agent;
 import com.prudential.demo.model.AgentNew;
-import com.prudential.demo.repository.AgentNewRepository;
 import com.prudential.demo.repository.AgentRepository;
 import com.prudential.demo.service.AgentService;
 import com.prudential.demo.service.MailService;
@@ -32,7 +30,7 @@ public class AgentController {
     private MailService mailService;
 
     @Autowired
-    private AgentNewRepository agentRepository;
+    private AgentRepository repo;
 
     @Value("${mail.smtp.host}")
     private String smtpHost;
@@ -46,20 +44,7 @@ public class AgentController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity getAgentList(@RequestBody AgentDTO request) {
         final List<AgentDTO> dataList = agentService.getDataList(request);
-        return ResponseEntity.ok(dataList);
-    }
-
-    @RequestMapping(value = "/sample", method = RequestMethod.GET)
-    public ResponseEntity getSample() {
-        List<AgentDTO> dataList = new LinkedList<>();
-        dataList.add(new AgentDTO(1L, "AGENT-9999", Calendar.getInstance(), 90000L));
-        dataList.add(new AgentDTO(2L, "AGENT-9999", Calendar.getInstance(), 70000L));
-        dataList.add(new AgentDTO(3L, "AGENT-9999", Calendar.getInstance(), 80000L));
-        dataList.add(new AgentDTO(4L, "AGENT-9999", Calendar.getInstance(), 20000L));
-        dataList.add(new AgentDTO(5L, "AGENT-9999", Calendar.getInstance(), 30000L));
-        dataList.add(new AgentDTO(6L, "AGENT-9999", Calendar.getInstance(), 40000L));
-        dataList.add(new AgentDTO(7L, "AGENT-9999", Calendar.getInstance(), 50000L));
-        return ResponseEntity.ok(dataList);
+        return ResponseEntity.ok(dataList.size());
     }
 
     @RequestMapping(value = "/download", method = RequestMethod.POST)
@@ -115,6 +100,7 @@ public class AgentController {
 
         for (int i = 0; i < 100001; i++) {
             AgentNew agentNew = new AgentNew();
+            agentNew.setId((long)i);
             agentNew.setAgentNumber("1234567");
             agentNew.setTransactionDate(calendar.getTime());
 
@@ -135,7 +121,7 @@ public class AgentController {
 //            System.out.println(agentNew.getApi());
 //        }
 
-        agentRepository.saveAll(dataList);
+        repo.saveAll(dataList);
         return "OK";
     }
 
