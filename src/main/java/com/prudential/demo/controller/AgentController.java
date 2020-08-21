@@ -72,6 +72,8 @@ public class AgentController {
 
     @RequestMapping(value = "/send-email", method = RequestMethod.POST)
     public ResponseEntity sendEmail(@RequestBody AgentDTO request) throws IOException {
+        System.out.println("Start");
+        System.out.println(System.currentTimeMillis());
         final List<AgentDTO> dataList = agentService.getDataList(request);
         final String attachment = util.createXlsx(dataList);
 
@@ -89,6 +91,8 @@ public class AgentController {
 
         mailService.sendMail(properties, request.getEmail(), attachment);
 
+        System.out.println("end");
+        System.out.println(System.currentTimeMillis());
         return ResponseEntity.ok("OK");
     }
 
