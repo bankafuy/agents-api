@@ -20,6 +20,7 @@ import java.util.*;
 
 import static com.prudential.demo.AliasName.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/agents")
 public class AgentController {
