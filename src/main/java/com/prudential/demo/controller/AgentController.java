@@ -59,6 +59,16 @@ public class AgentController {
 
     @RequestMapping(value = "/download", method = RequestMethod.POST)
     public CustomResponse download(@RequestBody AgentDTO request) throws IOException {
+
+        if(request.getFromDate() == null) {
+            return CustomResponse.ok("Please Send from date.");
+        }
+
+        if(request.getToDate() == null) {
+            return CustomResponse.ok("Please Send to date.");
+        }
+
+
         final List<AgentDTO> dataList = agentService.getDataList(request);
         Map<String, String> response = new HashMap<>();
         response.put("base64", util.createXlsx(dataList));
@@ -68,6 +78,15 @@ public class AgentController {
 
     @RequestMapping(value = "/send-email", method = RequestMethod.POST)
     public CustomResponse sendEmail(@RequestBody AgentDTO request) throws IOException {
+
+        if(request.getFromDate() == null) {
+            return CustomResponse.ok("Please Send from date.");
+        }
+
+        if(request.getToDate() == null) {
+            return CustomResponse.ok("Please Send to date.");
+        }
+
 
         final MyRunnable myRunnable = new MyRunnable(request);
         taskExecutor.execute(myRunnable);
