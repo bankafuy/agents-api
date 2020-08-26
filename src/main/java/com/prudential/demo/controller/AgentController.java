@@ -87,6 +87,9 @@ public class AgentController {
             return CustomResponse.ok("Please Send to date.");
         }
 
+        if(request.getEmail() == null) {
+            return CustomResponse.ok("Please send email.");
+        }
 
         final MyRunnable myRunnable = new MyRunnable(request);
         taskExecutor.execute(myRunnable);
